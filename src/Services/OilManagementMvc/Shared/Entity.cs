@@ -11,10 +11,20 @@ public class Entity
         return createdAt;
     }
 
-    public void SetCreatedAt(DateTime value)
+    public void SetCreatedAt()
     {
         createdAt = DateTime.UtcNow;
     }
 
-    public DateTime UpdatedAt { get; set; }
+    private DateTime updatedAt;
+
+    public DateTime GetUpdatedAt()
+    {
+        return updatedAt;
+    }
+
+    public void SetUpdatedAt()
+    {
+        updatedAt = DateTime.UtcNow;
+    }
 }

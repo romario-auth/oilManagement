@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using OilManagementMvc.Models;
 
 namespace OilManagementMvc.Data
 {
@@ -9,5 +10,6 @@ namespace OilManagementMvc.Data
             : base(options)
         {
         }
+        public DbSet<OilManagementMvc.Models.CollectPoint>? CollectPoint { get; set; }
     }
 }

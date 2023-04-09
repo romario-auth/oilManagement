@@ -10,4 +10,5 @@ public class CollectPoint : Entity
     public String ZipCode { get; set; }
     public int Number { get; set; }
     public String Name { get; set; }
+    public String? OwnPointCollect { get; set; }
 }

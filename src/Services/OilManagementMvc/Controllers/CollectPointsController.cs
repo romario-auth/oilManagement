@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OilManagementMvc.Data;
 using OilManagementMvc.Models;
+using System.Security.Claims;
 
 namespace OilManagementMvc.Controllers
 {
@@ -10,10 +12,12 @@ namespace OilManagementMvc.Controllers
     public class CollectPointsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CollectPointsController(ApplicationDbContext context)
+        public CollectPointsController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: CollectPoints
@@ -60,6 +64,7 @@ namespace OilManagementMvc.Controllers
             if (ModelState.IsValid)
             {
                 collectPoint.Id = Guid.NewGuid();
+                collectPoint.OwnPointCollect = _httpContextAccessor.HttpContext.User.Identity?.Name;
                 _context.Add(collectPoint);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

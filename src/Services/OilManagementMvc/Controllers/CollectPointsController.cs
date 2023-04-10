@@ -64,7 +64,7 @@ namespace OilManagementMvc.Controllers
             if (ModelState.IsValid)
             {
                 collectPoint.Id = Guid.NewGuid();
-                collectPoint.OwnPointCollect = _httpContextAccessor.HttpContext.User.Identity?.Name;
+                collectPoint.OwnPointCollect = _httpContextAccessor.HttpContext.User.Identity.Name;
                 _context.Add(collectPoint);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

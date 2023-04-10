@@ -1,28 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using OilManagementMvc.Data;
-using OilManagementMvc.DtoReturn;
 using OilManagementMvc.Models;
 using dto = OilManagementMvc.DtoReturn;
 
 namespace OilManagementMvc.Controllers
 {
+    [Authorize]
     public class RecyclesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RecyclesController(ApplicationDbContext context)
+        public RecyclesController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: Recycles
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Recycle.Include(r => r.CollectPoint);
@@ -30,6 +33,7 @@ namespace OilManagementMvc.Controllers
         }
 
         // GET: Recycles/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null || _context.Recycle == null)
@@ -190,6 +194,7 @@ namespace OilManagementMvc.Controllers
             var collectPoint = (_context.CollectPoint != null) ?
                                     _context
                                     .CollectPoint
+                                    .Where(x => x.OwnPointCollect == _httpContextAccessor.HttpContext.User.Identity.Name)
                                     .Select(c => new dto.SelectListItemCollectPoint
                                     {
                                         Id = c.Id,

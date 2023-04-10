@@ -11,5 +11,6 @@ namespace OilManagementMvc.Data
         {
         }
         public DbSet<OilManagementMvc.Models.CollectPoint>? CollectPoint { get; set; }
+        public DbSet<OilManagementMvc.Models.Recycle>? Recycle { get; set; }
     }
 }

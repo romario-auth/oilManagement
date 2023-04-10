@@ -5,11 +5,12 @@ namespace OilManagementMvc.Models;
 
 public class Recycle : Entity
 {
-    public CollectPoint CollectPoint { get; set; }
+    public CollectPoint? CollectPoint { get; set; }
     public Guid CollectPointId { get; set; }
     public TypeRecycle TypeRecycle { get; set; }
     public int Count { get; set; }
     public UnitType UnitType { get; set; }
+    public String Colletor { get; set; }
 }
 
 public enum UnitType

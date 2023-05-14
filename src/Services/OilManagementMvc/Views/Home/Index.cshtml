@@ -77,8 +77,90 @@
         </div>
         
         <div class="col-md-4">
-            <img src="/midea/graph.jpg" width="340" class="mx-auto d-block" alt="Graph recycle">
+            <!--<img src="/midea/graph.jpg" width="340" class="mx-auto d-block" alt="Graph recycle">-->
+
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
+
+            <div>
+                <ol class="list-group list-group-numbered">
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Realidade</div>
+                      <p class="text-resume">1,17 bilhão de litros de óleo de cozinha poderiam ser reciclados por ano no Brasil.</p>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">1,17 bilhão</span>
+                  </li>
+
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Muito pouco</div>
+                      <p class="text-resume">Menos de 10% é reciclado(apenas 108 milhões litros)</p>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">10%</span>
+                  </li>
+
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Transformação</div>
+                      <p class="text-resume">A transformação que você está ajudando a construir.
+                      (Baseado na média dos nossos pontos de coletas)</p>
+                    </div>
+                    <span class="badge bg-primary rounded-pill"><span id="litersToday">0</span></span>
+                  </li>
+                </ol>
+            </div>
+
         </div>
     </div>
     <p>Learn about <a href="https://earth911.com/recycling-guide/how-to-recycle-cooking-oil/">How to Recycle Cooking Oil</a>.</p>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+$(document).ready(function(){
+    $.get("http://localhost:5000/Recycles/Statistic", function(response, status){
+        
+        let recycleToday = 108000000;
+        let popBrazil = 210000000
+        let average = response.average;
+        let recycleGols = popBrazil*average;
+        let avaliableTorecicle = 1170000000-recycleToday-recycleGols;
+
+        $("#litersToday").text(recycleGols);
+
+        const data = {
+          labels: [
+            'Realidade: Não reciclado',
+            'Reciclado hoje',
+            'Traformação'
+          ],
+        datasets: [{
+            label: 'Reciclagem',
+            data: [avaliableTorecicle, recycleToday, recycleGols],
+            backgroundColor: [
+              'rgb(255, 99, 132)',
+              'rgb(54, 162, 235)',
+              'rgb(255, 205, 86)'
+            ],
+            hoverOffset: 4
+          }]
+        };
+
+
+
+        const config = {
+          type: 'doughnut',
+          data: data,
+        };
+
+        const ctx = document.getElementById('myChart');
+
+        new Chart(ctx, config);
+    });
+});
+</script>

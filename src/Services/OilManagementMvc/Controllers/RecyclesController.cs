@@ -182,6 +182,25 @@ namespace OilManagementMvc.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: Statistic
+        [AllowAnonymous]
+        public async Task<ActionResult<dto.DtoStatistic>> Statistic()
+        {
+            if (_context.Recycle == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Recycle'  is null.");
+            }
+
+            decimal recyclesAverage = Convert.ToDecimal(0.0);
+            if (_context.Recycle.FirstOrDefault() != null)
+                recyclesAverage = await _context.Recycle.Select(x => x.Count).AverageAsync();
+
+            var statistic = new dto.DtoStatistic();
+            statistic.Average = (recyclesAverage > Convert.ToDecimal(5.057)) ? Convert.ToDecimal(5.057) : recyclesAverage;
+
+            return Ok(statistic);
+        }
+
         private bool RecycleExists(Guid id)
         {
             return (_context.Recycle?.Any(e => e.Id == id)).GetValueOrDefault();
